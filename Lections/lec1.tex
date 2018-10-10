@@ -185,16 +185,16 @@ Precision можно интерпретировать как долю объек
 
     В данном случае решение будет решением СЛАУ:
     \[
-        w^T = \left(W^{T}W\right)^{-1}W^T y
+        w^T = \left(X^{T}X\right)^{-1}X^T y
     \]
 
     {\bf Проблема 1.} решение будет <<осмысленным>> только тогда, когда в данных реально есть линейная зависимость. В реальных данных почти не встречается.
 
-    {\bf Проблема 2.} Линейная зависимость признаков, $\det W^TW$ должен быть отличен от $0$.
+    {\bf Проблема 2.} Линейная зависимость признаков, $\det X^{T}X$ должен быть отличен от $0$.
 
     Решение проблемы: {\bf регуляризация}:
     \[
-        w^T = \left(W^{T}W + \lambda \cdot \mathrm{Id} \right)^{-1}W^T y
+        w^T = \left(X^{T}X + \lambda \cdot \mathrm{Id} \right)^{-1}X^T y
     \]
 
     \subsubsection{Градиентный спуск}
@@ -215,6 +215,52 @@ Precision можно интерпретировать как долю объек
     \[
         MSE = \frac{1}{N} \sum\limits_{i=1}^N \left( y_i - (W x_i + b)\right) ^ 2
     \]
+
+    {\bf Пролемы:}
+    \begin{itemize}
+        \item Переобучение\\
+        {\it Как бороться:} при переобучении коэффициенты стремятся к бесконечности. Лечится регуляризацией.
+        \[
+           \text{Lasso Regresstion (L1): } MSE = \frac{1}{N} \sum\limits_{i=1}^N \left( y_i - (W x_i + b)\right) ^ 2 + \lambda  \sum\limits_{i=1}^N \left|W_{i}\right|
+        \]
+        \[
+            \text{Ridge Regresstion (L2): } MSE = \frac{1}{N} \sum\limits_{i=1}^N \left( y_i - (W x_i + b)\right) ^ 2 + \lambda  \sum\limits_{i=1}^N W_{i}^2
+        \]
+
+        Эта красота эквивалентна задаче оптимизации:
+        \[
+            \begin{cases}
+                MSE = \frac{1}{N} \sum\limits_{i=1}^N \left( y_i - (W x_i + b)\right) ^ 2 \rightarrow 0 \\
+                \lambda  \sum\limits_{i=1}^N \left|W_{i}\right| \le C (=\mathrm{const})
+            \end{cases}
+        \]
+    \end{itemize}
+
+    \subsubsection{SVM. Метод опорных векторов}
+    {\bf Цель:} построить линейную модель, которая делит наши выборки наилучшим образом. (ищем оптимальную разделяющую поверхность, наиболее удалённую от всех точек выборки)
+
+    {\bf Пример:} пусть 2 класса -1 и 1. Хотим разделить: $y \cdot Xw > c$.
+
+    Решаем задачу оптимизацию:
+    \[
+        \begin{cases}
+            \mathrm{loss} \rightarrow \min \\
+            ||w|| < b
+        \end{cases}
+    \]
+
+    {\bf Цитата: } {\it Люди придумали нейронки и про это все забыли.}
+
+    \subsubsection{Логистическая регрессия}
+    \[
+        y = \sigma(WX), \qquad \sigma(x) = \frac{1}{1 + e^{-x}}
+    \]
+
+    Задача ставится следующим образом:
+    \[
+        y = \sign(WX - b)
+    \]
+
 
 
 \end{document}
